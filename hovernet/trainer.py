@@ -12,8 +12,8 @@ from tqdm import tqdm
 
 # Local
 from .loss import HoverLoss
-from .data import provider
-from .data import DATA_FOLDER
+from .PanNuke import provider
+from .PanNuke import DATA_FOLDER
 import hovernet.utils as utils
 from hovernet.storage import Meter
 
@@ -126,7 +126,7 @@ class Trainer(object):
                 num_workers=self.num_workers,
                 args={
                     "in_channels": args.in_channels,
-                    "image_shape": args.image_shape
+                    "image_size": args.image_size
                 }
             )
             for phase in self.phases
