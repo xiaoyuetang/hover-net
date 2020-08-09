@@ -71,7 +71,7 @@ class PanNukeDataset(Dataset):
 
         # Number of classes in the segmentation target
         self.classes = np.load(os.path.join(self.root, self.phase, "types.npy"))
-        self.num_classes = len(set(self.classes))
+        self.num_classes = 6
         logger.info(f"Number of classes: {self.num_classes}")
 
         # CLI args
@@ -89,8 +89,8 @@ class PanNukeDataset(Dataset):
         #
         # image = final(img_only(augmented(image)))
         # mask = final(mask_only(augmented(mask)))
-        image = torch.from_numpy(image)
-        mask = torch.from_numpy(mask)
+        image = torch.from_numpy(image).float()
+        mask = torch.from_numpy(mask).float()
 
         # Add a channel dimension (C in [N C H W]) if required
         if self.num_classes == 2:
