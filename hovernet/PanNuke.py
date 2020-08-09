@@ -5,6 +5,7 @@ from typing import Any, Dict
 # Image Processing
 import numpy as np
 import cv2
+import random
 # PyTorch
 import torch
 from torch.utils.data import DataLoader, Dataset
@@ -72,18 +73,23 @@ class PanNukeDataset(Dataset):
         self.classes = np.load(os.path.join(self.root, self.phase, "types.npy"))
         self.num_classes = len(set(self.classes))
 
-        # Dictionary specifying the mapping
-        # between pixel values [0, 255] and class indices [0, C-1]
-        if not len(class_dict) == self.num_classes:
-            raise ValueError(f"Length of class dict must be same "
-                             f"as number of classes.")
-        if not max(class_dict) == 255:
-            raise ValueError(f"Max intensity of grayscale images is 255, but "
-                             f"class dict: {class_dict} specifies otherwise")
-        if not min(class_dict) == 0:
-            raise ValueError(f"Min intensity of grayscale images is 0, but "
-                             f"class dict: {class_dict} specifies otherwise")
-        self.class_dict = class_dict
+        # class_dict = {}
+        # # Dictionary specifying the mapping
+        # for i, cla in enumerate(set(self.classes)):
+        #     color = random.randint(0, 255)
+        #     print(i, cla, color)
+        #     class_dict[i] = color
+        # # between pixel values [0, 255] and class indices [0, C-1]
+        # if not len(class_dict) == self.num_classes:
+        #     raise ValueError(f"Length of class dict must be same "
+        #                      f"as number of classes.")
+        # if not max(class_dict) == 255:
+        #     raise ValueError(f"Max intensity of grayscale images is 255, but "
+        #                      f"class dict: {class_dict} specifies otherwise")
+        # if not min(class_dict) == 0:
+        #     raise ValueError(f"Min intensity of grayscale images is 0, but "
+        #                      f"class dict: {class_dict} specifies otherwise")
+        # self.class_dict = class_dict
 
         # CLI args
         self.args = args
