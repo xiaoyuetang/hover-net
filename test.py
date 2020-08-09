@@ -83,9 +83,9 @@ class TestDataset(Dataset):
     def __init__(self, data_folder, cli_args):
         self.cli_args = cli_args
         self.root: str = data_folder
-        self.image_names: List[str] = sorted(os.listdir(os.path.join(self.root,
+        self.images: List[str] = sorted(os.listdir(os.path.join(self.root,
                                                                      "test",
-                                                                     "imgs")))
+                                                                     "images.npy")))
         self.transform = Compose(
             [
                 # Normalize images to [0..1]
@@ -98,22 +98,14 @@ class TestDataset(Dataset):
         )
 
     def __getitem__(self, idx: int) -> torch.Tensor:
-        # Get image name from list of image names
-        image_name: str = self.image_names[idx]
-        # Construct path to image
-        image_path: str = os.path.join(self.root, "test", "imgs", image_name)
-        # Read image with opencv
-        if self.cli_args.in_channels == 1:
-            image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-        else:
-            image = cv2.imread(image_path)
+        image = self.images[idx]
 
         # Check if image has been read properly
         if image.size == 0:
             raise IOError(f"cv2: Unable to load image - {image_path}")
 
         # Augment image
-        image = self.transform(image=image)["image"]
+        image = torch.from_numpy(image).float()
         # Return augmented image as a tensor
         return image
 
