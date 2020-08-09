@@ -78,17 +78,19 @@ class PanNukeDataset(Dataset):
         self.args = args
 
     def __getitem__(self, idx: int):
-        image = self.images[idx]
-        mask = self.masks[idx]
+        image = self.images[idx].reshape(-1,256,256)
+        mask = self.masks[idx].reshape(-1,256,256)
 
         # Data Augmentation for image and mask
-        augmented = self.transforms['aug'](image=image, mask=mask)
-        new_image = self.transforms['img_only'](image=augmented['image'])
-        new_mask = self.transforms['mask_only'](image=augmented['mask'])
-        aug_tensors = self.transforms['final'](image=new_image['image'],
-                                               mask=new_mask['image'])
-        image = aug_tensors['image']
-        mask = aug_tensors['mask']
+        # augmented = self.transforms['aug']
+        # img_only = self.transforms['img_only']
+        # mask_only = self.transforms['mask_only']
+        # final = self.transforms['final']
+        #
+        # image = final(img_only(augmented(image)))
+        # mask = final(mask_only(augmented(mask)))
+        image = torch.from_numpy(image)
+        mask = torch.from_numpy(mask)
 
         # Add a channel dimension (C in [N C H W]) if required
         if self.num_classes == 2:
